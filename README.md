@@ -1,6 +1,6 @@
 ## Welcome to this site I just created
 
-This is my first time trying to publish R markdown documents to GitHub, following [this really handy guide] (https://resources.github.com/whitepapers/github-and-rstudio/). The guide was fairly comprehensive apart from 
+This is my first time trying to publish R markdown documents to GitHub, following [this really handy guide](https://resources.github.com/whitepapers/github-and-rstudio/). The guide was fairly comprehensive apart from 
 
 * creating a `.yml` file. To do this in RStudio just open a New Text File, not R file or Rmd file and save as .yml)
 * writing the `_site.yml` file. This needs to be formatted right & the text the guide provided was not formatted/displayed right. [Look here](https://rmarkdown.rstudio.com/lesson-13.html)
