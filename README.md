@@ -1,37 +1,10 @@
-## Welcome to GitHub Pages
+## Welcome to this site I just created
 
-You can use the [editor on GitHub](https://github.com/JocelyneSze/UsingRinHPC/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+This is my first time trying to publish R markdown documents to GitHub, following [this really handy guide] (https://resources.github.com/whitepapers/github-and-rstudio/). The guide was fairly comprehensive apart from 
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+* creating a `.yml` file. To do this in RStudio just open a New Text File, not R file or Rmd file and save as .yml)
+* writing the `_site.yml` file. This needs to be formatted right & the text the guide provided was not formatted/displayed right. [Look here](https://rmarkdown.rstudio.com/lesson-13.html)
 
-### Markdown
+This is for a beginner's guide to using R on High Performance Computing (HPC) clusters, because I've just tried to do that for the last three weeks and found that I had to consult many different websites and fora to find out how to do what I wanted. This document is meant for people who have never tried using command line, and may be a bit daunted about where/how to start. While some of the specifics are written for the University of Sheffield's HPC clusters (e.g. data storage areas), the guide is largely useful for those using other clusters which use Sun Grid Engine job schedulers. 
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/JocelyneSze/UsingRinHPC/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+[Click here to access the guide](https://jocelynesze.github.io/UsingRinHPC/)
