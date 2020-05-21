@@ -1,0 +1,38 @@
+---
+title: "Transferring files"
+urlcolor: blue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This is mostly relevant only for TUOS HPC users. You need to be connected on the VPN to transfer files, and use the terminal.
+
+### From your computer to the remote cluster
+```{bash, eval=FALSE}
+scp your/file/path/and/filename.ext UserName@sharc.sheffield.ac.uk:/file/path
+```
+You'll be prompted to type your password. Your file path should be specified relative to your current working directory. 
+
+To transfer folders/directories
+```{bash, eval=FALSE}
+scp -r your/file/path/to/directory UserName@sharc.sheffield.ac.uk:/file/path
+```
+
+### From the remote cluster to your computer
+You should be connected on the VPN, but not logged in to the HPC
+```{bash, eval=FALSE}
+scp UserName@sharc.sheffield.ac.uk:/file/path/filename.ext your/computer/file/path
+```
+Again, you'll be prompted to type your password, and your computer file path should also be specified relative to your current working directory. Similarly, to transfer folders, just add `-r` after `scp`.
+
+### File storage on the HPC
+There are [several data storage repositories available](https://docs.hpc.shef.ac.uk/en/latest/hpc/filestore.html) to a HPC user:
+
+* __Home directory__: `/home/UserName` which has 10GB of storage, available across system login and worker nodes and on ShARC and Iceberg. It is snapshotted and backed up. 
+* __Data directory__: `/data/UserName` which has 100GB of storage, available across system login and worker nodes and on ShARC and Iceberg. It is snapshotted but not backed up. 
+* __Fastdata area__: `/fastdata` which is supposedly really quick and optimised for reading/writing large files from multiple node and threads simultaneously but you need to create your own directory `mk dir /fastdata/UserName`. There's no quota for individual users but they're also not snapshotted or backed up. 
+* __Shared directory__: `/shared` which has been set up by Mike Massam for the Edwards lab, and has a shared total of 10TB data storage capacity. This is snapshotted and backed up. The file path is `/shared/edwards_lab1/User/UserName` (replace UserName with yours). Useful because you can access your files from your own computer, but seems to possibly have problems with permissions.
+* __Scratch directory__: `/scratch` which is a per-node temporary storage and cleaned up after each job, so if you've saved any output here you'll need to copy them to another directory. 
+

@@ -5,7 +5,13 @@ navbar:
   left:
    - text: "Home"
      href: index.html
-   - text: "The guide"
+   - text: "Accessing the HPC"
      href: UsingHPCGuide.html
+   - text: "Using R on the HPC"
+     href: UsingR.html
+   - text: "Parallel computing"
+     href: parallelComputing.html
+   - text: "Transferring files"
+     href: fileTransfer.html
 output:
  html_document:

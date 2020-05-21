@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Learning to parallelise</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Using HPC Guide</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="UsingHPCGuide.html">Accessing the HPC</a>
+</li>
+<li>
+  <a href="UsingR.html">Using R on the HPC</a>
+</li>
+<li>
+  <a href="parallelComputing.html">Parallel computing</a>
+</li>
+<li>
+  <a href="fileTransfer.html">Transferring files</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Learning to parallelise</h1>
+
+</div>
+
+
+<p>References that I found useful in trying to understand this vast topic:</p>
+<ul>
+<li>R bloggers <a href="https://www.r-bloggers.com/how-to-go-parallel-in-r-basics-tips/">how to go parallel in R basics tips</a></li>
+<li>this site on <a href="http://www.cureffi.org/2014/01/15/running-r-batch-mode-linux/">running the same R script on many different input files</a></li>
+<li>The many documents on HPC and parallel computing put up by various universities around the world, particularly</li>
+<li>the <a href="https://info.hpc.sussex.ac.uk/hpc-guide/how-to/index.html">HPC User Guide provided by the University of Sussex</a></li>
+<li>the webpage on <a href="https://dept.stat.lsa.umich.edu/~jerrick/courses/stat701/notes/parallel.html">Parallel Processing in R at the Dept of Statistics, University of Michigan</a></li>
+</ul>
+<p>There’s <a href="https://docs.hpc.shef.ac.uk/en/latest/parallel/index.html">more information on different ways of using parallel computing on Sheffield’s HPC site</a> (though I don’t understand most of it…)</p>
+<p><strong>When to parallelise</strong></p>
+<ul>
+<li>If you have to repeat the same steps several times. Which you might do with a for loop, but you should do with the apply family of functions (<code>lapply</code>, <code>tapply</code> etc.) instead because they’re more efficient.</li>
+<li>If you have multiple cores on your computer (most modern computers do) that you can utilise (because R only runs one process aka thread by default, which runs on only one core)</li>
+<li>If you have access to a HPC</li>
+</ul>
+<p>A core on the HPC cluster is what you automatically get when you make a job request, it specifies a single machine in the cluster network. On your laptop or desktop, you may have just one processor but it’ll have multiple cores. Check using the R package <code>parallel</code></p>
+<pre class="r"><code>library(parallel) # comes with base, no need to install
+detectCores()</code></pre>
+<p>On my MacBook Pro Late 2011 version with its 2.4 GHz Intel Core i5 processor, there are 4 cores. 2 physical (when I check system report on my Mac), 4 virtual. Though I’m not sure what the differences between physical and virtual cores are…</p>
+<div id="parallel-computing-on-your-own-computer" class="section level2">
+<h2>Parallel computing on your own computer</h2>
+<p>You would basically be splitting a ‘lapply’-like function over the multiple cores in your computer. There are two main methods: 1) PSOCK: Parallel Socket Cluster and 2) FORK</p>
+<p>PSOCK launches a new version of R on each core and works on all systems including Windows, but the environment is empty so they need to be explicitly shared. It appears to be more time-consuming and more complicated.</p>
+<p>FORKing copies the entire current version of R and transfers it to a new core, so has a shared environment (no need to explicitly share variables and libraries again) and apart from the fact that it does not work on Windows, it seems to be the generally preferred method (if you’re not running on Windows).</p>
+<p><strong>Using base package <code>parallel</code></strong> The base package <code>parallel</code> allows a lot of parallelisation to be done without additional packages installed. For example, using <code>parLapply</code> (PSOCK method) or <code>mclapply</code> (FORK method) instead of <code>lapply</code>.</p>
+<p>Using the PSOCK method:</p>
+<pre class="r"><code>library(parallel)
+library(lme4)
+
+# the function we will use as an example
+ex &lt;- function(x) {
+  lmer(Petal.width ~ Sepal.Width + Petal.Length + (1 | Species), data=iris)
+}
+# assume we also need a variable
+x &lt;- c(1:5)
+
+# number of cores to use (-1 so as not to freeze the computer)
+noCores &lt;- detectCores() - 1
+# Initiate a cluster
+cl &lt;- makeCluster(noCores)
+# &#39;share&#39; library to each core
+clusterEvalQ(cl, library(lme4))
+# if there are variables, they also need to be shared
+clusterExport(cl, x)
+# call the parallel version of lapply to run the function 10 times
+parLapply(cl, 1:10, ex)
+# stop the cluster to free up resources
+stopCluster(cl)</code></pre>
+<p>Or using <code>mclapply</code></p>
+<pre class="r"><code>library(parallel)
+library(lme4)
+
+# the function we will use as an example
+ex &lt;- function(x) {
+  lmer(Petal.width ~ Sepal.Width + Petal.Length + (1 | Species), data=iris)
+}
+
+# call the parallel version of lapply to run the function 10 times
+mclapply(1:10, ex)</code></pre>
+<p><strong>Other packages</strong> Alternatively, there are also specific libraries you can install to use, like <code>foreach</code> which requires the <code>doParallel</code> package too. The <code>doParallel</code> package is a wrapper for <code>parallel</code>.</p>
+<pre class="r"><code># install.packages(c(&#39;foreach&#39;, &#39;doParallel&#39;))
+library(parallel)
+library(foreach)
+library(lme4)
+
+# the function we will use as an example
+ex &lt;- function(x) {
+  lmer(Petal.width ~ Sepal.Width + Petal.Length + (1 | Species), data=iris)
+}
+# assume we also need a variable
+x &lt;- c(1:5)
+
+
+# start a cluster
+cl &lt;- makeCluster(noCores)
+registerDoParallel(cl) # this is necessary for the parallelisation to work
+
+# use foreach
+foreach(1:10,
+        .combine=list, # or you can output a vector &#39;c&#39;, or matrix &#39;rbind&#39; or &#39;cbind&#39;
+        .export=&#39;x&#39;, # .export is the same as clusterExport 
+        .packages=&#39;lme4&#39;) %dopar% # .packages is the same as clusterEvalQ
+  ex
+
+stopCluster(cl)</code></pre>
+</div>
+<div id="parallel-computing-on-the-hpc-cluster" class="section level2">
+<h2>Parallel computing on the HPC cluster</h2>
+<p>There are several different ways to do this on the cluster. The simplest one, which is perhaps most like how you would do it on your computer, is a <strong>task array</strong>, where each task is independent of the other and will be run on different cores on different nodes at different times (as determined by the job scheduler SGE). Then there is <strong>Shared Memory Parallelism</strong>, where the tasks have to share the same memory and so will be run on different cores on the same node. A little more complicated, is <strong>Message Passing Interface</strong>, where the tasks might be run on different cores but need to share memory, and so need to communicate data/other information by passing messages. Then there’s a hybrid smp/mpi way. Unfortunately, I’ve not quite got the hang of smp and/or mpi at the moment, so this guide won’t include those.</p>
+<div id="setting-up-a-task-array-job" class="section level3">
+<h3>Setting up a task array job</h3>
+<p>This is (I think) what one is most likely to use the HPC to do parallel computing for. It takes multiple input files and runs the same R script on them to get the corresponding output files. From my search, it seemed like there may be many different ways to do this/to write the necessary scripts, but this is what I’ve done which works for me on ShARC.</p>
+<div id="writing-the-bash-script" class="section level4">
+<h4>Writing the bash script</h4>
+<p>Similar to submitting a batch serial job, this requires a bash script (that I’ll call <code>taskArray.sh</code>) but with modifications.</p>
+<pre class="bash"><code>#!/bin/bash
+#-l rmem=XXG
+#$ -t 1-N
+#$ -N jobName
+#$ -M UserName@email.address
+#$ -m bea
+#$ -o /file/path/to/Output.txt
+#$ -j y
+
+cd /working/directory
+
+# specify input files in a text file called Index, one file per line
+INPUT_FILE=$(sed -n -e &quot;$SGE_TASK_ID p&quot; Index.txt)
+
+# output the input file name and task ID to keep track
+echo &quot;The input file is $INPUT_FILE&quot;
+echo &quot;Task ID is $SGE_TASK_ID&quot;
+
+module load apps/R/3.6.3/gcc-8.2.0
+
+Rscript myScript.R $INPUT_FILE</code></pre>
+<p>The specifications are the same, the only additional argument is <code>-t 1-N</code> which tells SGE this is a task array job, and to run the R script <code>myScript.R</code> 1 to N times, for the N input files you have. It can only call your input files using the $SGE_TASK_ID (which would be 1 to N) assigned; I found it easier to have my input file names in a plain text document (called Index.txt) instead of renaming my files (for e.g. input.1, input.2, … input.N).</p>
+<p>My plain text file contains the list of my input files, including file path if needed relative to the working directory I specified in my bash script, and looks like this</p>
+<pre class="bash"><code>directory/firstFile.csv
+directory/secondFile.csv
+directory/thirdFile.csv</code></pre>
+<p>The line <code>INPUT_FILE=$(sed -n -e &quot;$SGE_TASK_ID p&quot; Index.txt)</code> basically calls the corresponding line in the Index.txt file and feeds that into the Rscript command. This bash script has to be made executable as well, and both the bash script <code>taskArray.sh</code> and the text file with the list of input files <code>Index.txt</code> have to be in the same directory.</p>
+</div>
+<div id="writing-the-r-script" class="section level4">
+<h4>Writing the R script</h4>
+<p>The R script has to be modified slightly since you’re not hard-coding the input file into the script itself. This R script should be in the same directory as taskArray.sh and Index.txt files.</p>
+<pre class="r"><code>shhh &lt;- suppressPackageStartupMessages # so I don&#39;t get a bunch of start up messages in the output file, a tip I encountered while searching through StackOverflow...
+shhh(library(&#39;packageName&#39;))
+shhh(library(&#39;packageName&#39;))
+
+## read in dataset
+args &lt;- commandArgs(trailingOnly = TRUE) # to get the input files from command line
+dat &lt;- read.csv(args[1]) # feed the input file into the read.csv function</code></pre>
+<p>Submitting the batch job is basically the same process, being connected on the VPN, logging on the the HPC system, then running <code>qsub taskArray.sh</code>. I find the <code>commandArgs</code> function quite useful to be able to feed in different input arguments from a bash serial script without having to change the R script.</p>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

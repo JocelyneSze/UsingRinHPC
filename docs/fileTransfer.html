@@ -11,7 +11,7 @@
 
 
 
-<title>Home</title>
+<title>Transferring files</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -298,14 +298,36 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Home</h1>
+<h1 class="title toc-ignore">Transferring files</h1>
 
 </div>
 
 
-<p>This guide was written to aid those who want to use R on High Performance Computing (HPC) clusters but are not sure where or how to start. I had just spend my last three weeks figuring out how to access and use R on the University of Sheffield’s HPC clusters and learning how to write scripts (bash and R) to run my code. It entailed cross-referencing multiple websites, such as various universities’ HPC guides, background information on parallel computing, writing and running bash scripts, and using command line. I thought it might be helpful to consolidate the different bits of information I gleaned through this endeavour into one site that might make it easier for a novice to start out.</p>
-<p>If there are any errors or ways to improve my code/make it more efficient, please do let me know! I hope you find it useful.</p>
-<p>Contact me at jocelyne[dot]sze[at]gmail[dot]com. This document was compiled on 21 May 2020.</p>
+<p>This is mostly relevant only for TUOS HPC users. You need to be connected on the VPN to transfer files, and use the terminal.</p>
+<div id="from-your-computer-to-the-remote-cluster" class="section level3">
+<h3>From your computer to the remote cluster</h3>
+<pre class="bash"><code>scp your/file/path/and/filename.ext UserName@sharc.sheffield.ac.uk:/file/path</code></pre>
+<p>You’ll be prompted to type your password. Your file path should be specified relative to your current working directory.</p>
+<p>To transfer folders/directories</p>
+<pre class="bash"><code>scp -r your/file/path/to/directory UserName@sharc.sheffield.ac.uk:/file/path</code></pre>
+</div>
+<div id="from-the-remote-cluster-to-your-computer" class="section level3">
+<h3>From the remote cluster to your computer</h3>
+<p>You should be connected on the VPN, but not logged in to the HPC</p>
+<pre class="bash"><code>scp UserName@sharc.sheffield.ac.uk:/file/path/filename.ext your/computer/file/path</code></pre>
+<p>Again, you’ll be prompted to type your password, and your computer file path should also be specified relative to your current working directory. Similarly, to transfer folders, just add <code>-r</code> after <code>scp</code>.</p>
+</div>
+<div id="file-storage-on-the-hpc" class="section level3">
+<h3>File storage on the HPC</h3>
+<p>There are <a href="https://docs.hpc.shef.ac.uk/en/latest/hpc/filestore.html">several data storage repositories available</a> to a HPC user:</p>
+<ul>
+<li><strong>Home directory</strong>: <code>/home/UserName</code> which has 10GB of storage, available across system login and worker nodes and on ShARC and Iceberg. It is snapshotted and backed up.</li>
+<li><strong>Data directory</strong>: <code>/data/UserName</code> which has 100GB of storage, available across system login and worker nodes and on ShARC and Iceberg. It is snapshotted but not backed up.</li>
+<li><strong>Fastdata area</strong>: <code>/fastdata</code> which is supposedly really quick and optimised for reading/writing large files from multiple node and threads simultaneously but you need to create your own directory <code>mk dir /fastdata/UserName</code>. There’s no quota for individual users but they’re also not snapshotted or backed up.</li>
+<li><strong>Shared directory</strong>: <code>/shared</code> which has been set up by Mike Massam for the Edwards lab, and has a shared total of 10TB data storage capacity. This is snapshotted and backed up. The file path is <code>/shared/edwards_lab1/User/UserName</code> (replace UserName with yours). Useful because you can access your files from your own computer, but seems to possibly have problems with permissions.</li>
+<li><strong>Scratch directory</strong>: <code>/scratch</code> which is a per-node temporary storage and cleaned up after each job, so if you’ve saved any output here you’ll need to copy them to another directory.</li>
+</ul>
+</div>
 
 
 
