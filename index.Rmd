@@ -1,0 +1,13 @@
+---
+title: "index"
+author: "Jocelyne S Sze"
+date: "21/05/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## This is the welcome page
+
