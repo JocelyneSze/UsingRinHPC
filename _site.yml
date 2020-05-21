@@ -1,0 +1,11 @@
+name: "Using R on the University of Sheffield's HPC clusters"
+output_dir: "docs"
+navbar:
+  title: "Using HPC Guide"
+  left:
+   - text: "Home"
+     href: index.html
+   - text: "The guide"
+     href: UsingHPCGuide.html
+output:
+ html_document:
