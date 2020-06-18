@@ -325,6 +325,16 @@ $(document).ready(function () {
 <p>Once you’re on a worker node, you can open or load applications.</p>
 <pre class="bash"><code>module load apps/R/3.6.3/gcc-8.2.0</code></pre>
 <p>This loads the particular version of R available on the HPC, which also happens to be the latest at this point in time. To load the latest without specifying which version, use <code>module load apps/R</code>.</p>
+<p>If you’re going to use R for spatial analyses, you’ll likely be using the R packages <code>rgdal</code> and <code>spdep</code> amongst others. To install and to use these packages, you’ll need to load the relevant libraries <em>before</em> you enter the R environment and try to load the packages. If you have issues installing a certain package, check through the error messages and see if you need to load an external library (like gdal, proj etc.) and check if the library already exists on the HPC system with <code>module avail</code> in the worker node. Otherwise, flag it up to the really helpful and wonderful people at <code>hpc[at]sheffield[dot]ac[dot]uk</code>.</p>
+<pre class="bash"><code># for rgdal
+module load libs/gdal/2.2.0/gcc/gcc-4.9.4
+module load libs/proj/4.9.3/gcc-4.9.4
+# for spdep
+module load libs/udunits/2.2.26/gcc-4.9.4
+module load libs/proj/4.9.3/gcc-4.9.4
+module load libs/geos/3.6.1/gcc-4.9.4
+# for rgeos
+module load libs/geos/3.6.1/gcc-4.9.4</code></pre>
 <div class="figure">
 <img src="Images/HPC_LogInLoadR.png" alt="Loading R in the HPC" />
 <p class="caption"><em>Loading R in the HPC</em></p>
