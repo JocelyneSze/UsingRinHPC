@@ -11,5 +11,7 @@ This guide was written to aid those who want to use R on High Performance Comput
 
 If there are any errors or ways to improve my code/make it more efficient, please do let me know! I hope you find it useful. 
 
-Contact me at jocelyne[dot]sze[at]gmail[dot]com. This document was written in R Markdown and published on 21 May 2020.
+Contact me at jocelyne[dot]sze[at]gmail[dot]com. This document was written in R Markdown and published on 21 May 2020. 
+
+Last updated: 18 June 2020
 
