@@ -33,6 +33,7 @@ module load apps/R/3.6.3/gcc-8.2.0
 
 This loads the particular version of R available on the HPC, which also happens to be the latest at this point in time. To load the latest without specifying which version, use `module load apps/R`.
 
+
 If you're going to use R for spatial analyses, you'll likely be using the R packages `rgdal` and `spdep` amongst others. To install and to use these packages, you'll need to load the relevant libraries *before* you enter the R environment and try to load the packages. If you have issues installing a certain package, check through the error messages and see if you need to load an external library (like gdal, proj etc.) and check if the library already exists on the HPC system with `module avail` in the worker node. Otherwise, flag it up to the really helpful and wonderful people at `hpc[at]sheffield[dot]ac[dot]uk`. 
 
 ```{bash, eval=FALSE}
@@ -41,11 +42,13 @@ module load libs/gdal/2.2.0/gcc/gcc-4.9.4
 module load libs/proj/4.9.3/gcc-4.9.4
 # for spdep
 module load libs/udunits/2.2.26/gcc-4.9.4
+module load libs/gdal/2.2.0/gcc/gcc-4.9.4
 module load libs/proj/4.9.3/gcc-4.9.4
 module load libs/geos/3.6.1/gcc-4.9.4
 # for rgeos
 module load libs/geos/3.6.1/gcc-4.9.4
 ```
+
 
 ![*Loading R in the HPC*](Images/HPC_LogInLoadR.png)
 
