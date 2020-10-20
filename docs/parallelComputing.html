@@ -399,7 +399,7 @@ stopCluster(cl)</code></pre>
 <h4>Writing the bash script</h4>
 <p>Similar to submitting a batch serial job, this requires a bash script (that I’ll call <code>taskArray.sh</code>) but with modifications.</p>
 <pre class="bash"><code>#!/bin/bash
-#-l rmem=XXG
+#$ -l rmem=XXG
 #$ -t 1-N
 #$ -N jobName
 #$ -M UserName@email.address
@@ -424,7 +424,8 @@ Rscript myScript.R $INPUT_FILE</code></pre>
 <pre class="bash"><code>directory/firstFile.csv
 directory/secondFile.csv
 directory/thirdFile.csv</code></pre>
-<p>The line <code>INPUT_FILE=$(sed -n -e &quot;$SGE_TASK_ID p&quot; Index.txt)</code> basically calls the corresponding line in the Index.txt file and feeds that into the Rscript command. This bash script has to be made executable as well, and both the bash script <code>taskArray.sh</code> and the text file with the list of input files <code>Index.txt</code> have to be in the same directory.</p>
+<p>The line <code>INPUT_FILE=$(sed -n -e "$SGE_TASK_ID p" Index.txt)</code> basically calls the corresponding line in the Index.txt file and feeds that into the Rscript command. This bash script has to be made executable as well, and both the bash script <code>taskArray.sh</code> and the text file with the list of input files <code>Index.txt</code> have to be in the same directory.</p>
+<p>If you don’t have multiple different input files, and just want to run the same script repeatedly, you can just drop the lines about INPUT FILES. Within your R script though, assuming you have different output for each run, you will likely need to include a line to get the array number: <code>arrayid &lt;- as.numeric(Sys.getenv('SGE_TASK_ID'))</code>.</p>
 </div>
 <div id="writing-the-r-script" class="section level4">
 <h4>Writing the R script</h4>

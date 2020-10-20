@@ -8,19 +8,21 @@ urlcolor: blue
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-This document explains how to use R on the University of Sheffield's High Performance Computing clusters. R is only available on Iceberg and ShARC, which are clusters managed using Son of Grid Engine job scheduling software (which is a derivative of Sun Grid Engine, or SGE). If you're googling how to submit jobs etc., make sure you're looking at SGE commands (and not Slurm which is another scheduler that is used on the Bessemer cluster).
-
-Iceberg is slightly older (with older processers) and has [these specifications](https://docs.hpc.shef.ac.uk/en/latest/iceberg/cluster_specs.html). Of relevance, there are about 203 worker nodes and a total of 3440 cores, they're built differently with varying numbers of cores and total memory. There are 4 nodes which have 16 cores and total memory of 256GB each. Iceberg does not require VPN connection to access, though I think during this work-from-home period, one does require the University of Sheffield's Virtual Private Network (VPN) to access Iceberg remotely.
+This document explains how to use R on the University of Sheffield's High Performance Computing clusters. R is only available on ~~Iceberg~~^1^ and ShARC, which are clusters managed using Son of Grid Engine job scheduling software (which is a derivative of Sun Grid Engine, or SGE). If you're googling how to submit jobs etc., make sure you're looking at SGE commands (and not Slurm which is another scheduler that is used on the Bessemer cluster).
 
 Sheffield Advanced Research Computer (ShARC) is apparently the "new High Performance Computing System and the successor to Iceberg" and has [these specifications](https://docs.hpc.shef.ac.uk/en/latest/sharc/cluster_specs.html#sharc-specs). It has a total of 121 worker nodes and 2024 cores (though some are exclusive to research groups that purchased them). There are also 4 nodes with 16 cores and total memory of 256GB each. 
 
+^1^ Iceberg will be decommissioned on 30 November 2020 & will not be accessible after this date. Iceberg is slightly older (with older processers) and has [these specifications](https://docs.hpc.shef.ac.uk/en/latest/iceberg/cluster_specs.html). Of relevance, there are about 203 worker nodes and a total of 3440 cores, they're built differently with varying numbers of cores and total memory. There are 4 nodes which have 16 cores and total memory of 256GB each. Iceberg does not require VPN connection to access, though I think during this work-from-home period, one does require the University of Sheffield's Virtual Private Network (VPN) to access Iceberg remotely.
+
+
 ## Using command line tools
-On OS X, open a Terminal window (type 'Terminal' in Spotlight or search in Applications). I'm using macOS High Sierra 10.13.6.  
+On **macOS**, open a Terminal window (type 'Terminal' in Spotlight or search in Applications). I'm using macOS High Sierra 10.13.6.  
 
 You should see your name and home folder.
 
 ![*Opening a terminal window*](Images/Terminal.png)
 
+For **Microsoft Windows** users, open a PowerShell terminal or Command Prompt, though the Sheffield HPC guide recommends using the browser application (myAPPs portal) to access the HPC, following the [instructions here](https://www.sheffield.ac.uk/it-services/research/hpc/using/access/browser). Once you've downloaded the necessary client (Oracle Secure Global Desktop Client) and logged in, there's the option to use an interactive job or a terminal.
 
 ## Other useful command line prompts
 * `pwd` print current directory (or more commonly known as a folder)
@@ -38,7 +40,6 @@ These commands are all relative to your current location. If you're running some
 
 ![*Basic command line commands*](Images/TerminalCommands.png)
 
-For Microsoft Windows users, open a PowerShell terminal or Command Prompt, though the Sheffield HPC guide recommends using the browser application (myAPPs portal) to access the HPC, following the [instructions here](https://www.sheffield.ac.uk/it-services/research/hpc/using/access/browser). Once you've downloaded the necessary client (Oracle Secure Global Desktop Client) and logged in, there's the option to use an interactive job or a terminal.
 
 ## Logging in to the HPC
 You need to be connected to the University of Sheffield Virtual Private Network first. Once connected, type the following on your terminal
@@ -60,4 +61,4 @@ In the above screenshot, I was logged in to ShARC, before logging out and loggin
 
 Once you've logged in, you'll notice that instead of being in your computer `(base)`, you are now in a head node of the HPC `[UserName@sharc-loginX ~]`. At this point, you can access files but you can't load applications (like R); for that you need to be assigned to a worker node.
 
-You can log in to Iceberg instead of ShARC by replacing 'sharc' with 'iceberg', as in UserName@iceberg.sheffield.ac.uk. Both these clusters have R available as an application, but the latest version of R on Iceberg is 3.3.1 compared to 3.6.3 (as of May 2020). 
+You can log in to Iceberg instead of ShARC by replacing 'sharc' with 'iceberg', as in UserName@iceberg.sheffield.ac.uk. Both these clusters have R available as an application, but the latest version of R on Iceberg is 3.3.1 compared to 3.6.3 (as of May 2020). Iceberg will also be decommissioned on 30 November 2020 and will not be accessible after.

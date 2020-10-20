@@ -303,17 +303,18 @@ $(document).ready(function () {
 </div>
 
 
-<p>This document explains how to use R on the University of Sheffield’s High Performance Computing clusters. R is only available on Iceberg and ShARC, which are clusters managed using Son of Grid Engine job scheduling software (which is a derivative of Sun Grid Engine, or SGE). If you’re googling how to submit jobs etc., make sure you’re looking at SGE commands (and not Slurm which is another scheduler that is used on the Bessemer cluster).</p>
-<p>Iceberg is slightly older (with older processers) and has <a href="https://docs.hpc.shef.ac.uk/en/latest/iceberg/cluster_specs.html">these specifications</a>. Of relevance, there are about 203 worker nodes and a total of 3440 cores, they’re built differently with varying numbers of cores and total memory. There are 4 nodes which have 16 cores and total memory of 256GB each. Iceberg does not require VPN connection to access, though I think during this work-from-home period, one does require the University of Sheffield’s Virtual Private Network (VPN) to access Iceberg remotely.</p>
+<p>This document explains how to use R on the University of Sheffield’s High Performance Computing clusters. R is only available on <del>Iceberg</del><sup>1</sup> and ShARC, which are clusters managed using Son of Grid Engine job scheduling software (which is a derivative of Sun Grid Engine, or SGE). If you’re googling how to submit jobs etc., make sure you’re looking at SGE commands (and not Slurm which is another scheduler that is used on the Bessemer cluster).</p>
 <p>Sheffield Advanced Research Computer (ShARC) is apparently the “new High Performance Computing System and the successor to Iceberg” and has <a href="https://docs.hpc.shef.ac.uk/en/latest/sharc/cluster_specs.html#sharc-specs">these specifications</a>. It has a total of 121 worker nodes and 2024 cores (though some are exclusive to research groups that purchased them). There are also 4 nodes with 16 cores and total memory of 256GB each.</p>
+<p><sup>1</sup> Iceberg will be decommissioned on 30 November 2020 &amp; will not be accessible after this date. Iceberg is slightly older (with older processers) and has <a href="https://docs.hpc.shef.ac.uk/en/latest/iceberg/cluster_specs.html">these specifications</a>. Of relevance, there are about 203 worker nodes and a total of 3440 cores, they’re built differently with varying numbers of cores and total memory. There are 4 nodes which have 16 cores and total memory of 256GB each. Iceberg does not require VPN connection to access, though I think during this work-from-home period, one does require the University of Sheffield’s Virtual Private Network (VPN) to access Iceberg remotely.</p>
 <div id="using-command-line-tools" class="section level2">
 <h2>Using command line tools</h2>
-<p>On OS X, open a Terminal window (type ‘Terminal’ in Spotlight or search in Applications). I’m using macOS High Sierra 10.13.6.</p>
+<p>On <strong>macOS</strong>, open a Terminal window (type ‘Terminal’ in Spotlight or search in Applications). I’m using macOS High Sierra 10.13.6.</p>
 <p>You should see your name and home folder.</p>
 <div class="figure">
-<img src="Images/Terminal.png" alt="Opening a terminal window" />
+<img src="Images/Terminal.png" alt="" />
 <p class="caption"><em>Opening a terminal window</em></p>
 </div>
+<p>For <strong>Microsoft Windows</strong> users, open a PowerShell terminal or Command Prompt, though the Sheffield HPC guide recommends using the browser application (myAPPs portal) to access the HPC, following the <a href="https://www.sheffield.ac.uk/it-services/research/hpc/using/access/browser">instructions here</a>. Once you’ve downloaded the necessary client (Oracle Secure Global Desktop Client) and logged in, there’s the option to use an interactive job or a terminal.</p>
 </div>
 <div id="other-useful-command-line-prompts" class="section level2">
 <h2>Other useful command line prompts</h2>
@@ -331,10 +332,9 @@ $(document).ready(function () {
 </ul>
 <p>These commands are all relative to your current location. If you’re running something on command line and want to cancel it (for e.g., I often try and log in to the HPC without being connected to the VPN and the prompt to enter password never appears), use <code>Ctrl + c</code> to “kill” the command. A useful tip I picked up while reading the many webpages is using <code>Ctrl + a</code> to move the cursor to the start of the command line.</p>
 <div class="figure">
-<img src="Images/TerminalCommands.png" alt="Basic command line commands" />
+<img src="Images/TerminalCommands.png" alt="" />
 <p class="caption"><em>Basic command line commands</em></p>
 </div>
-<p>For Microsoft Windows users, open a PowerShell terminal or Command Prompt, though the Sheffield HPC guide recommends using the browser application (myAPPs portal) to access the HPC, following the <a href="https://www.sheffield.ac.uk/it-services/research/hpc/using/access/browser">instructions here</a>. Once you’ve downloaded the necessary client (Oracle Secure Global Desktop Client) and logged in, there’s the option to use an interactive job or a terminal.</p>
 </div>
 <div id="logging-in-to-the-hpc" class="section level2">
 <h2>Logging in to the HPC</h2>
@@ -343,16 +343,16 @@ $(document).ready(function () {
 <p>A prompt will appear for your password. On MacOS terminals, the password is not be printed as you type it, and if you make any mistakes or try to backspace, it’ll return <code>Permission denied, please try again.</code></p>
 <p>The first time you log in from your computer, a prompt will appear asking if you do want to connect to the remote cluster. Type yes.</p>
 <div class="figure">
-<img src="Images/HPC_firstLogIn.png" alt="First log in" />
+<img src="Images/HPC_firstLogIn.png" alt="" />
 <p class="caption"><em>First log in</em></p>
 </div>
 <p>In the above screenshot, I was logged in to ShARC, before logging out and logging in to Iceberg for the first time. <em>I’m not sure what the <code>-bash: warning: setLocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory</code> warning means, it shouldn’t appear but it also doesn’t seem to have affected my use.</em></p>
 <div class="figure">
-<img src="Images/HPC_LogIn.png" alt="Logging in to the HPC" />
+<img src="Images/HPC_LogIn.png" alt="" />
 <p class="caption"><em>Logging in to the HPC</em></p>
 </div>
 <p>Once you’ve logged in, you’ll notice that instead of being in your computer <code>(base)</code>, you are now in a head node of the HPC <code>[UserName@sharc-loginX ~]</code>. At this point, you can access files but you can’t load applications (like R); for that you need to be assigned to a worker node.</p>
-<p>You can log in to Iceberg instead of ShARC by replacing ‘sharc’ with ‘iceberg’, as in <a href="mailto:UserName@iceberg.sheffield.ac.uk">UserName@iceberg.sheffield.ac.uk</a>. Both these clusters have R available as an application, but the latest version of R on Iceberg is 3.3.1 compared to 3.6.3 (as of May 2020).</p>
+<p>You can log in to Iceberg instead of ShARC by replacing ‘sharc’ with ‘iceberg’, as in <a href="mailto:UserName@iceberg.sheffield.ac.uk" class="email">UserName@iceberg.sheffield.ac.uk</a>. Both these clusters have R available as an application, but the latest version of R on Iceberg is 3.3.1 compared to 3.6.3 (as of May 2020). Iceberg will also be decommissioned on 30 November 2020 and will not be accessible after.</p>
 </div>
 
 

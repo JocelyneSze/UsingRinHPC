@@ -124,7 +124,7 @@ Similar to submitting a batch serial job, this requires a bash script (that I'll
 
 ```{bash, eval=FALSE}
 #!/bin/bash
-#-l rmem=XXG
+#$ -l rmem=XXG
 #$ -t 1-N
 #$ -N jobName
 #$ -M UserName@email.address
@@ -156,6 +156,8 @@ directory/thirdFile.csv
 ```
 
 The line `INPUT_FILE=$(sed -n -e "$SGE_TASK_ID p" Index.txt)` basically calls the corresponding line in the Index.txt file and feeds that into the Rscript command. This bash script has to be made executable as well, and both the bash script `taskArray.sh` and the text file with the list of input files `Index.txt` have to be in the same directory.
+
+If you don't have multiple different input files, and just want to run the same script repeatedly, you can just drop the lines about INPUT FILES. Within your R script though, assuming you have different output for each run, you will likely need to include a line to get the array number: `arrayid <- as.numeric(Sys.getenv('SGE_TASK_ID'))`.
 
 #### Writing the R script
 The R script has to be modified slightly since you're not hard-coding the input file into the script itself. This R script should be in the same directory as taskArray.sh and Index.txt files. 

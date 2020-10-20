@@ -80,21 +80,23 @@ Start with a shebang (shell bang) `#!` for a bash script, specify various argume
 #$ -N jobName
 #$ -M UserName@email.address
 #$ -m bea
-#$ -wd /file/path/to/directory
 #$ -o /file/path/to/Output.txt
 #$ -j y
 
+cd /file/directory/you/want
+
 module load apps/R/3.6.3/gcc-8.2.0
+
 Rscript myTestScript.R
 ```
-* `-l h_rt=XX:XX:XX` specifies the running time for the script in HH:MM:SS. After this time, the job will be killed regardless of its status (even if it hasn't finished!). The current maximum allowed is 96 hours (4 days) for ShARC and 168 hours (7 days) for Iceberg.
-* `-l rmem=XXXG` specifies the amount of memory (for each core) required. If the job exceeds the allocated memory, the job will also be killed. 256G is the maximum available (since that's the maximum amount of memory available for a node). 
-* `-N` specifies the name you want to give to the job, makes it easier to keep track of multiple jobs you're submitting, rather than trying to remember the job numbers for each of them.
-* `-M` specifies the email address you want updates to be sent to.
-* `-m bea` tells it to send an email (to the above specified address) when the job begins, ends, or is aborted.
-* `-wd` specifies the working directory, or you could use `-cwd` for the current working directory (if you run the script from the directory you already want it to. You can also set the working directory within the R script itself...)
-* `-o` specifies the output file. If you don't specify the file path, the output file will be in the working directory.
-* `-j y` tells it to join the error and output file. Alternatively, if you want separate error and output files, use `-e /file/path/to/Error.txt` instead.
+* `#$ -l h_rt=XX:XX:XX` specifies the running time for the script in HH:MM:SS. After this time, the job will be killed regardless of its status (even if it hasn't finished!). The current maximum allowed is 96 hours (4 days) for ShARC and 168 hours (7 days) for Iceberg.
+* `#$ -l rmem=XXXG` specifies the amount of memory (for each core) required. If the job exceeds the allocated memory, the job will also be killed. 256G is the maximum available (since that's the maximum amount of memory available for a node). 
+* `#$ -N` specifies the name you want to give to the job, makes it easier to keep track of multiple jobs you're submitting, rather than trying to remember the job numbers for each of them.
+* `#$ -M` specifies the email address you want updates to be sent to.
+* `#$ -m bea` tells it to send an email (to the above specified address) when the job begins, ends, or is aborted.
+* `#$ -o` specifies the output file. If you don't specify the file path, the output file will be in the working directory.
+* `#$ -j y` tells it to join the error and output file. Alternatively, if you want separate error and output files, use `-e /file/path/to/Error.txt` instead.
+* `cd` changes the directory to the one that the job should be running from. I had previously used `#$ -wd` to do this but apparently `cd` is more reliable... 
 * the module load command is the same as what you would call in an interactive job
 * `Rscript` runs the R script you have written. There are a few other ways of getting your R script done, such as `R CMD BATCH` and `littler` but apparently the former is terrible and I've not tried the latter.
 

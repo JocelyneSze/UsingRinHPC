@@ -337,7 +337,7 @@ module load libs/geos/3.6.1/gcc-4.9.4
 # for rgeos
 module load libs/geos/3.6.1/gcc-4.9.4</code></pre>
 <div class="figure">
-<img src="Images/HPC_LogInLoadR.png" alt="Loading R in the HPC" />
+<img src="Images/HPC_LogInLoadR.png" alt="" />
 <p class="caption"><em>Loading R in the HPC</em></p>
 </div>
 <p>In the above screenshot, I loaded R version 3.5.1, because according to the website, that was the latest version available. You can find out what modules/R versions are available on the system with <code>module avail</code> once you’re logged in to the HPC.</p>
@@ -348,7 +348,7 @@ module load libs/geos/3.6.1/gcc-4.9.4</code></pre>
 <p>When you first install packages, you need to create a home folder, which will be specific to each version of R you use.</p>
 <p>When you type <code>install.packages('packageName')</code> in R, you will receive a warning, and respond that <code>yes</code>, you would like to use a personal library, and again that <code>yes</code>, you would like to create a personal library.</p>
 <div class="figure">
-<img src="Images/HPC_FirstPackageInstall.png" alt="First package installation" />
+<img src="Images/HPC_FirstPackageInstall.png" alt="" />
 <p class="caption"><em>First package installation</em></p>
 </div>
 <p>You’ll then have to select which CRAN mirror (I use 50, Bristol) to use. Subsequent packages that you install will automatically go into your personal library. To check what packages have been installed, in the head node (not in the R session), type <code>ls ~/R/x86_64-pc-linux-gnu-library/3.6/</code>. Or whatever version of R you might be using.</p>
@@ -367,21 +367,23 @@ module load libs/geos/3.6.1/gcc-4.9.4</code></pre>
 #$ -N jobName
 #$ -M UserName@email.address
 #$ -m bea
-#$ -wd /file/path/to/directory
 #$ -o /file/path/to/Output.txt
 #$ -j y
 
+cd /file/directory/you/want
+
 module load apps/R/3.6.3/gcc-8.2.0
+
 Rscript myTestScript.R</code></pre>
 <ul>
-<li><code>-l h_rt=XX:XX:XX</code> specifies the running time for the script in HH:MM:SS. After this time, the job will be killed regardless of its status (even if it hasn’t finished!). The current maximum allowed is 96 hours (4 days) for ShARC and 168 hours (7 days) for Iceberg.</li>
-<li><code>-l rmem=XXXG</code> specifies the amount of memory (for each core) required. If the job exceeds the allocated memory, the job will also be killed. 256G is the maximum available (since that’s the maximum amount of memory available for a node).</li>
-<li><code>-N</code> specifies the name you want to give to the job, makes it easier to keep track of multiple jobs you’re submitting, rather than trying to remember the job numbers for each of them.</li>
-<li><code>-M</code> specifies the email address you want updates to be sent to.</li>
-<li><code>-m bea</code> tells it to send an email (to the above specified address) when the job begins, ends, or is aborted.</li>
-<li><code>-wd</code> specifies the working directory, or you could use <code>-cwd</code> for the current working directory (if you run the script from the directory you already want it to. You can also set the working directory within the R script itself…)</li>
-<li><code>-o</code> specifies the output file. If you don’t specify the file path, the output file will be in the working directory.</li>
-<li><code>-j y</code> tells it to join the error and output file. Alternatively, if you want separate error and output files, use <code>-e /file/path/to/Error.txt</code> instead.</li>
+<li><code>#$ -l h_rt=XX:XX:XX</code> specifies the running time for the script in HH:MM:SS. After this time, the job will be killed regardless of its status (even if it hasn’t finished!). The current maximum allowed is 96 hours (4 days) for ShARC and 168 hours (7 days) for Iceberg.</li>
+<li><code>#$ -l rmem=XXXG</code> specifies the amount of memory (for each core) required. If the job exceeds the allocated memory, the job will also be killed. 256G is the maximum available (since that’s the maximum amount of memory available for a node).</li>
+<li><code>#$ -N</code> specifies the name you want to give to the job, makes it easier to keep track of multiple jobs you’re submitting, rather than trying to remember the job numbers for each of them.</li>
+<li><code>#$ -M</code> specifies the email address you want updates to be sent to.</li>
+<li><code>#$ -m bea</code> tells it to send an email (to the above specified address) when the job begins, ends, or is aborted.</li>
+<li><code>#$ -o</code> specifies the output file. If you don’t specify the file path, the output file will be in the working directory.</li>
+<li><code>#$ -j y</code> tells it to join the error and output file. Alternatively, if you want separate error and output files, use <code>-e /file/path/to/Error.txt</code> instead.</li>
+<li><code>cd</code> changes the directory to the one that the job should be running from. I had previously used <code>#$ -wd</code> to do this but apparently <code>cd</code> is more reliable…</li>
 <li>the module load command is the same as what you would call in an interactive job</li>
 <li><code>Rscript</code> runs the R script you have written. There are a few other ways of getting your R script done, such as <code>R CMD BATCH</code> and <code>littler</code> but apparently the former is terrible and I’ve not tried the latter.</li>
 </ul>
@@ -390,7 +392,7 @@ Rscript myTestScript.R</code></pre>
 chmod 755 bashScript.ext</code></pre>
 <p>It apparently doesn’t matter what your file extension is, whether it’s .sh or .txt. It changes colour when the file has been made executable.</p>
 <div class="figure">
-<img src="Images/Terminal_makeExecutable.png" alt="Executable file is a different colour to a normal file" />
+<img src="Images/Terminal_makeExecutable.png" alt="" />
 <p class="caption">Executable file is a different colour to a normal file</p>
 </div>
 <p>Once you’ve got your R script (written as you normally would, but make sure it doesn’t require any interactive input) and your bash script written and saved to a directory that’s accessible on the HPC, you’re good to go! It’s a generally good idea to test it out before submitting your real job.</p>
@@ -413,7 +415,7 @@ library(&#39;Package&#39;)
 <p>Back in terminal, make sure you’re connected on the VPN, logged in to the HPC using <code>ssh</code>. From the head node, you can submit your batch job with</p>
 <pre class="bash"><code>qsub file/path/to/bashScript.ext</code></pre>
 <div class="figure">
-<img src="Images/HPC_jobSubmitted.png" alt="Submit job" />
+<img src="Images/HPC_jobSubmitted.png" alt="" />
 <p class="caption">Submit job</p>
 </div>
 <p>And that’s it! Or, you can also navigate to the directory that your bash script sits in with <code>cd</code>, and run <code>qsub bashScript.ext</code> from there.</p>
