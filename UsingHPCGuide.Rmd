@@ -31,10 +31,12 @@ For **Microsoft Windows** users, open a PowerShell terminal or Command Prompt, t
 * `mkdir file/path/directoryName` create a directory
 * `ls` to list all items in the current directory
 * `mv old/file/path/fileName.ext new/file/path` to move a file to a different location. You can also use this to rename your files, like `mv oldFileName.ext newFileName.ext`
-* `rm` to delete a file (! warning! this is permanent and cannot be undone)
+* `rm` to delete a file (! warning! this is permanent and cannot be undone)†
 * `rm file/path/*` to delete everything in a directory. To delete the directory itself, use `rm -r file/path`
 * `cat fileName.ext` to print/view the contents of the file (all of it!)
 * `head fileName.ext` to print/view the first few lines of the file
+
+†There is **is** the possibility of retrieving an accidentally deleted file, **if** it's within the time frame that snapshots are retained. See this section on [retrieving accidentally deleted files](https://jocelynesze.github.io/UsingRinHPC/retrievingFiles.html). 
 
 These commands are all relative to your current location. If you're running something on command line and want to cancel it (for e.g., I often try and log in to the HPC without being connected to the VPN and the prompt to enter password never appears), use `Ctrl + c` to "kill" the command. A useful tip I picked up while reading the many webpages is using `Ctrl + a` to move the cursor to the start of the command line. 
 

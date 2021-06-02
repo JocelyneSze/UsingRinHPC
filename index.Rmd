@@ -5,6 +5,8 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+# you should remember that after you re-write these .Rmd files, you need to run rmarkdown::render_site() in the Console, then commit to Git and push.
 ```
 
 This guide was written to aid those who want to use R on High Performance Computing (HPC) clusters but are not sure where or how to start. I had just spend my last three weeks figuring out how to access and use R on the University of Sheffield's HPC clusters and learning how to write scripts (bash and R) to run my code. It entailed cross-referencing multiple websites, such as various universities' HPC guides, background information on parallel computing, writing and running bash scripts, and using command line. I thought it might be helpful to consolidate the different bits of information I gleaned through this endeavour into one site that might make it easier for a novice to start out. 
@@ -13,5 +15,5 @@ If there are any errors or ways to improve my code/make it more efficient, pleas
 
 Contact me at jocelyne[dot]sze[at]gmail[dot]com. This document was written in R Markdown and first published on 21 May 2020. 
 
-Last updated: 20 October 2020
+Last updated: 2 June 2021
 

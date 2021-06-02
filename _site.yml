@@ -13,5 +13,7 @@ navbar:
      href: parallelComputing.html
    - text: "Transferring files"
      href: fileTransfer.html
+   - text: "Retrieving deleted files"
+     href: retrievingFiles.html
 output:
  html_document:

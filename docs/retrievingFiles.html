@@ -9,9 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Jocelyne S Sze" />
 
 
-<title>Transferring files</title>
+<title>retrievingFiles</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -270,35 +271,31 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Transferring files</h1>
+<h1 class="title toc-ignore">retrievingFiles</h1>
+<h4 class="author">Jocelyne S Sze</h4>
+<h4 class="date">6/2/2021</h4>
 
 </div>
 
 
-<p>This is mostly relevant only for TUOS HPC users. You need to be connected on the VPN to transfer files, and use the terminal.</p>
-<div id="from-your-computer-to-the-remote-cluster" class="section level3">
-<h3>From your computer to the remote cluster</h3>
-<pre class="bash"><code>scp your/file/path/and/filename.ext UserName@sharc.sheffield.ac.uk:/file/path</code></pre>
-<p>You’ll be prompted to type your password. Your file path should be specified relative to your current working directory.</p>
-<p>To transfer folders/directories</p>
-<pre class="bash"><code>scp -r your/file/path/to/directory UserName@sharc.sheffield.ac.uk:/file/path</code></pre>
+<div id="backing-up-files" class="section level2">
+<h2>Backing up files</h2>
+<p>Data management is very important, needless to say, and losing data can be pretty detrimental and mean days or weeks of repeating the same work. There are two ways of having safeguards for files being accidentally lost: <a href="https://docs.hpc.shef.ac.uk/en/latest/glossary.html#term-Snapshotted-storage">snapshots</a> and backups. Snapshot refers to copying the entire directory at various frequencies (e.g. four-hourly or daily) and retaining it for certain duration (e.g. for 7 days), while backup means it’s saved in a different place (e.g. in an external hard drive), just in case something happens to that particular storage space.</p>
+<p>Check here to find out <a href="https://docs.hpc.shef.ac.uk/en/latest/hpc/filestore.html">the different storage areas available</a> to users of the University of Sheffield’s HPC and the differences between them. Here, I focus on the data directory which is the main directory I use for storing my files on ShARC, since it has 100GB capacity. It has a four-hourly snapshot and a nightly snapshot, with the 10 most recent four-hourly snapshots and the last 7 days of nightly snapshots retained. So if you save your files here, and accidentally deleted some files, you have 7 days to retrieve them before they are really gone. For the home directory on ShARC, nightly snapshots are retained for the last 28 days.</p>
 </div>
-<div id="from-the-remote-cluster-to-your-computer" class="section level3">
-<h3>From the remote cluster to your computer</h3>
-<p>You should be connected on the VPN, but not logged in to the HPC</p>
-<pre class="bash"><code>scp UserName@sharc.sheffield.ac.uk:/file/path/filename.ext your/computer/file/path</code></pre>
-<p>Again, you’ll be prompted to type your password, and your computer file path should also be specified relative to your current working directory. Similarly, to transfer folders, just add <code>-r</code> after <code>scp</code>.</p>
+<div id="retrieving-files" class="section level2">
+<h2>Retrieving files</h2>
+<p>First, navigate to the snapshots. They’re in a hidden folder, so you cannot see/access them by using <code>ls</code> normally and need to explicitly navigate to the folder.</p>
+<pre class="bash"><code>cd /data/YourUserName/.snapshot
+ls </code></pre>
+<p>You should see the contents of your snapshot folder looking something like this.</p>
+<div class="figure">
+<img src="Images/HPC_snapshotFolder.png" alt="" />
+<p class="caption">Snapshot folder of data directory</p>
 </div>
-<div id="file-storage-on-the-hpc" class="section level3">
-<h3>File storage on the HPC</h3>
-<p>There are <a href="https://docs.hpc.shef.ac.uk/en/latest/hpc/filestore.html">several data storage repositories available</a> to a HPC user:</p>
-<ul>
-<li><strong>Home directory</strong>: <code>/home/UserName</code> which has 10GB of storage, available across system login and worker nodes and on ShARC and Iceberg. It is snapshotted and backed up.</li>
-<li><strong>Data directory</strong>: <code>/data/UserName</code> which has 100GB of storage, available across system login and worker nodes and on ShARC and Iceberg. It is snapshotted but not backed up.</li>
-<li><strong>Fastdata area</strong>: <code>/fastdata</code> which is supposedly really quick and optimised for reading/writing large files from multiple node and threads simultaneously but you need to create your own directory <code>mk dir /fastdata/UserName</code>. There’s no quota for individual users but they’re also not snapshotted or backed up.</li>
-<li><strong>Shared directory</strong>: <code>/shared</code> which has been set up by Mike Massam for the Edwards lab, and has a shared total of 10TB data storage capacity. This is snapshotted and backed up. The file path is <code>/shared/edwards_lab1/User/UserName</code> (replace UserName with yours). Useful because you can access your files from your own computer, but seems to possibly have problems with permissions.</li>
-<li><strong>Scratch directory</strong>: <code>/scratch</code> which is a per-node temporary storage and cleaned up after each job, so if you’ve saved any output here you’ll need to copy them to another directory.</li>
-</ul>
+<p>You can then look through the different snapshotted back-ups with <code>cd</code> or <code>ls</code> to either change directory or list what’s in those folders. You’ll need to have single or double quotation marks around the folder names as they contain spaces, e.g. <code>cd "Daily @ 01:00.2021-05-31_0100"</code>.</p>
+<p>Once you’ve found the file you’ve accidentally deleted, copy it back to your home or data directory with <code>cp</code>, remembering how your file paths are set. In this case, I am in one of the Daily snapshot folder and I’m transferring a file from the snapshotted Input folder into the data directory’s Input folder.</p>
+<pre class="bash"><code>cp Input/FileThatIDeleted.csv /data/YourUserName/Input</code></pre>
 </div>
 
 
